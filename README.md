@@ -30,7 +30,7 @@ diff|TEXT|4D styled text (HTML subset)
 
 * Properties of options and thier default values
 
-``diffTimeout``:``1.0``  
+``diffTimeout``:``1.0``  
 ``diffEditCost``:``4``  
 ``patchMargin``:``4``  
 ``patchDeleteThreshold``:``0.5``  
