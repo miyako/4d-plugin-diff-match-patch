@@ -25,5 +25,17 @@ Parameter|Type|Description
 ------------|------------|----
 old|TEXT|
 new|TEXT|
-option|TEXT|JSON
+options|TEXT|JSON
 diff|TEXT|4D styled text (HTML subset)
+
+* Properties of options and thier default values
+
+``diffTimeout``:``1.0``  
+``diffEditCost``:``4``  
+``patchMargin``:``4``  
+``patchDeleteThreshold``:``0.5``  
+``matchThreshold``:``0.5``  
+``matchDistance``:``1000``  
+``matchMaxBits``:``32``  
+
+see []() for details
