@@ -38,4 +38,4 @@ diff|TEXT|4D styled text (HTML subset)
 ``matchDistance``:``1000``  
 ``matchMaxBits``:``32``  
 
-see []() for details
+see [diff_match_patch.h](https://github.com/miyako/4d-plugin-diff-match-patch/blob/master/diff_match_patch/cpp/diff_match_patch.h) for details
