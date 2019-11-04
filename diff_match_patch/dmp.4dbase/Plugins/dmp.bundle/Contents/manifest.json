@@ -1,1 +1,11 @@
-﻿{"name":"dmp","id":20000,"commands":[{"theme":"new theme1","syntax":"diff_match_patch(&T;&T;&T):T"}]}
+{
+    "name": "dmp",
+    "id": 20000,
+    "commands": [
+        {
+            "theme": "new theme1",
+            "syntax": "diff_match_patch(&T;&T;&T):T",
+            "threadSafe": false
+        }
+    ]
+}
