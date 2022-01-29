@@ -1,0 +1,11 @@
+{
+	"name": "Diff Match Patch",
+	"id": 20000,
+	"commands": [
+		{
+			"theme": "Diff Match Patch",
+			"syntax": "diff_match_patch(&T;&T;&J):T",
+			"threadSafe": true
+		}
+	]
+}
