@@ -1,21 +1,16 @@
+![version](https://img.shields.io/badge/version-18%2B-EB8E5F)
+![platform](https://img.shields.io/static/v1?label=platform&message=mac-intel%20|%20mac-arm%20|%20win-64&color=blue)
+[![license](https://img.shields.io/github/license/miyako/4d-plugin-diff-match-patch)](LICENSE)
+![downloads](https://img.shields.io/github/downloads/miyako/4d-plugin-diff-match-patch/total)
+
 # 4d-plugin-diff-match-patch
 Basic implementation of [google-diff-match-patch](https://github.com/google/diff-match-patch)
-
-### Platform
-
-| carbon | cocoa | win32 | win64 |
-|:------:|:-----:|:---------:|:---------:|
-||<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|
 
 ### Screenshot
 
 <img width="421" alt="2018-02-14 15 49 21" src="https://user-images.githubusercontent.com/1725068/36197663-bed69022-11b7-11e8-8425-3dc7ae9fb62d.png">
 
 instead of standard ``<ins>`` and ``<del>`` tags with ``background`` style, the library is modified to return ``<span>`` with ``background-color`` style, for better compatibility with 4D multi style text.
-
-### Releases
-
-[1.0](https://github.com/miyako/4d-plugin-diff-match-patch/releases/tag/1.0)
 
 ## Syntax
 
