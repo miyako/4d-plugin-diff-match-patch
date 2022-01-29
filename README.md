@@ -12,10 +12,6 @@ Basic implementation of [google-diff-match-patch](https://github.com/google/diff
 
 instead of standard ``<ins>`` and ``<del>`` tags with ``background`` style, the library is modified to return ``<span>`` with ``background-color`` style, for better compatibility with 4D multi style text.
 
-### Releases
-
-[1.0](https://github.com/miyako/4d-plugin-diff-match-patch/releases/tag/1.0)
-
 ## Syntax
 
 ```
