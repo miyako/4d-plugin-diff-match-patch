@@ -1242,11 +1242,11 @@ void splice(NSMutableArray *input, NSUInteger start, NSUInteger count, NSArray *
 
     switch (aDiff.operation) {
       case DIFF_INSERT:
-            [html appendFormat:@"<span style=\"background:#e6ffe6;\">%@</span>", text];
+            [html appendFormat:@"<span style=\"background-color:#e6ffe6;\">%@</span>", text];
 //            [html appendFormat:@"<ins style=\"background:#e6ffe6;\">%@</ins>", text];
         break;
       case DIFF_DELETE:
-            [html appendFormat:@"<span style=\"background:#ffe6e6;\">%@</span>", text];
+            [html appendFormat:@"<span style=\"background-color:#ffe6e6;\">%@</span>", text];
 //            [html appendFormat:@"<del style=\"background:#ffe6e6;\">%@</del>", text];
         break;
       case DIFF_EQUAL:
