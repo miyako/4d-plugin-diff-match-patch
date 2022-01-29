@@ -47,8 +47,12 @@ void diff_match_patch(PA_PluginParameters params) {
     Param1_text_1.fromParamAtIndex(pParams, 1);
     Param2_text_2.fromParamAtIndex(pParams, 2);
 
+#if VERSIONWIN
     /* because we used the same name for function */
     class diff_match_patch dmp;
+#else
+    DiffMatchPatch *dmp = [[DiffMatchPatch alloc]init];
+#endif
     
     PA_ObjectRef option = PA_GetObjectParameter(params, 3);
     
@@ -83,7 +87,11 @@ void diff_match_patch(PA_PluginParameters params) {
         }
         
         if(ob_is_defined(option, L"matchMaxBits")) {
+#if VERSIONWIN
             dmp.Match_MaxBits = (short)ob_get_n(option, L"matchMaxBits");
+#else
+            //protected on mac
+#endif
         }
         
     }
@@ -98,13 +106,22 @@ void diff_match_patch(PA_PluginParameters params) {
     NSLog(@"Match_MaxBits:%i", dmp.Match_MaxBits);
      */
     
+#if VERSIONWIN
     QString t1((const QChar *)Param1_text_1.getUTF16StringPtr(), Param1_text_1.getUTF16Length());
     QString t2((const QChar *)Param2_text_2.getUTF16StringPtr(), Param2_text_2.getUTF16Length());
-    
     QList<Diff>diffs = dmp.diff_main(t1, t2);
-
     QString html = dmp.diff_prettyHtml(diffs);
-    
     returnValue.setUTF16String((const PA_Unichar *)html.data(), html.length());
+#else
+    NSString *t1 = Param1_text_1.copyUTF16String();
+    NSString *t2 = Param2_text_2.copyUTF16String();
+    NSMutableArray *diffs = [dmp diff_mainOfOldString:t1 andNewString:t2];
+    NSString *html = [dmp diff_prettyHtml:diffs];
+    returnValue.setUTF16String(html);
+    [t2 release];
+    [t1 release];
+    [dmp release];
+#endif
+
     returnValue.setReturn(pResult);
 }

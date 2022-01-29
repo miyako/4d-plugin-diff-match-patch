@@ -18,9 +18,6 @@
 		D130064F12F02D9700702C0E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D130064E12F02D9700702C0E /* Cocoa.framework */; };
 		D13116A91A03ACB700DE1322 /* 4DPluginAPI.c in Sources */ = {isa = PBXBuildFile; fileRef = D13116A81A03ACB700DE1322 /* 4DPluginAPI.c */; settings = {COMPILER_FLAGS = "-Wno-multichar"; }; };
 		D134D4AC1A030BA0008D14EF /* manifest.json in CopyFiles */ = {isa = PBXBuildFile; fileRef = D134D4A91A030B06008D14EF /* manifest.json */; };
-		D16F683D25012E73008D85D1 /* diff_match_patch.h in Headers */ = {isa = PBXBuildFile; fileRef = D16F683B25012E73008D85D1 /* diff_match_patch.h */; };
-		D16F683E25012E73008D85D1 /* diff_match_patch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D16F683C25012E73008D85D1 /* diff_match_patch.cpp */; };
-		D16F684025012F16008D85D1 /* libQtCore.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D16F683F25012F16008D85D1 /* libQtCore.4.dylib */; };
 		D16F684625012FDE008D85D1 /* C_TEXT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D16F684125012FDE008D85D1 /* C_TEXT.cpp */; };
 		D16F684725012FDE008D85D1 /* C_TYPES.h in Headers */ = {isa = PBXBuildFile; fileRef = D16F684225012FDE008D85D1 /* C_TYPES.h */; };
 		D16F684825012FDE008D85D1 /* C_TEXT.h in Headers */ = {isa = PBXBuildFile; fileRef = D16F684325012FDE008D85D1 /* C_TEXT.h */; };
@@ -28,6 +25,12 @@
 		D16F684A25012FDE008D85D1 /* C_LONGINT.h in Headers */ = {isa = PBXBuildFile; fileRef = D16F684525012FDE008D85D1 /* C_LONGINT.h */; };
 		D16F684D25013068008D85D1 /* 4DPlugin-JSON.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D16F684B25013068008D85D1 /* 4DPlugin-JSON.cpp */; };
 		D16F684E25013068008D85D1 /* 4DPlugin-JSON.h in Headers */ = {isa = PBXBuildFile; fileRef = D16F684C25013068008D85D1 /* 4DPlugin-JSON.h */; };
+		D18C399627A5C42D004CE678 /* DiffMatchPatch.m in Sources */ = {isa = PBXBuildFile; fileRef = D18C399127A5C42D004CE678 /* DiffMatchPatch.m */; };
+		D18C399727A5C42D004CE678 /* NSMutableDictionary+DMPExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = D18C399227A5C42D004CE678 /* NSMutableDictionary+DMPExtensions.m */; };
+		D18C399827A5C42D004CE678 /* NSString+JavaSubstring.m in Sources */ = {isa = PBXBuildFile; fileRef = D18C399327A5C42D004CE678 /* NSString+JavaSubstring.m */; };
+		D18C399927A5C42D004CE678 /* NSString+UriCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = D18C399427A5C42D004CE678 /* NSString+UriCompatibility.m */; };
+		D18C399A27A5C42D004CE678 /* NSString+UnicharUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D18C399527A5C42D004CE678 /* NSString+UnicharUtilities.m */; };
+		D18C399C27A5C5DA004CE678 /* DiffMatchPatchCFUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = D18C399B27A5C5DA004CE678 /* DiffMatchPatchCFUtilities.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -58,9 +61,6 @@
 		D13116A81A03ACB700DE1322 /* 4DPluginAPI.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = 4DPluginAPI.c; sourceTree = "<group>"; };
 		D134D4A91A030B06008D14EF /* manifest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = manifest.json; sourceTree = "<group>"; };
 		D14D10DD1A03A8A5008B3411 /* constants.xlf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = constants.xlf; sourceTree = "<group>"; };
-		D16F683B25012E73008D85D1 /* diff_match_patch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = diff_match_patch.h; path = cpp/diff_match_patch.h; sourceTree = "<group>"; };
-		D16F683C25012E73008D85D1 /* diff_match_patch.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = diff_match_patch.cpp; path = cpp/diff_match_patch.cpp; sourceTree = "<group>"; };
-		D16F683F25012F16008D85D1 /* libQtCore.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libQtCore.4.dylib; path = "test/Plugins/Diff Match Patch.bundle/Contents/MacOS/libQtCore.4.dylib"; sourceTree = "<group>"; };
 		D16F684125012FDE008D85D1 /* C_TEXT.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = C_TEXT.cpp; path = "4D Plugin API/Classes/C_TEXT.cpp"; sourceTree = "<group>"; };
 		D16F684225012FDE008D85D1 /* C_TYPES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = C_TYPES.h; path = "4D Plugin API/Classes/C_TYPES.h"; sourceTree = "<group>"; };
 		D16F684325012FDE008D85D1 /* C_TEXT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = C_TEXT.h; path = "4D Plugin API/Classes/C_TEXT.h"; sourceTree = "<group>"; };
@@ -68,6 +68,12 @@
 		D16F684525012FDE008D85D1 /* C_LONGINT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = C_LONGINT.h; path = "4D Plugin API/Classes/C_LONGINT.h"; sourceTree = "<group>"; };
 		D16F684B25013068008D85D1 /* 4DPlugin-JSON.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = "4DPlugin-JSON.cpp"; path = "support/4DPlugin-JSON.cpp"; sourceTree = "<group>"; };
 		D16F684C25013068008D85D1 /* 4DPlugin-JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "4DPlugin-JSON.h"; path = "support/4DPlugin-JSON.h"; sourceTree = "<group>"; };
+		D18C399127A5C42D004CE678 /* DiffMatchPatch.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = DiffMatchPatch.m; path = objc/DiffMatchPatch.m; sourceTree = "<group>"; };
+		D18C399227A5C42D004CE678 /* NSMutableDictionary+DMPExtensions.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = "NSMutableDictionary+DMPExtensions.m"; path = "objc/NSMutableDictionary+DMPExtensions.m"; sourceTree = "<group>"; };
+		D18C399327A5C42D004CE678 /* NSString+JavaSubstring.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = "NSString+JavaSubstring.m"; path = "objc/NSString+JavaSubstring.m"; sourceTree = "<group>"; };
+		D18C399427A5C42D004CE678 /* NSString+UriCompatibility.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = "NSString+UriCompatibility.m"; path = "objc/NSString+UriCompatibility.m"; sourceTree = "<group>"; };
+		D18C399527A5C42D004CE678 /* NSString+UnicharUtilities.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = "NSString+UnicharUtilities.m"; path = "objc/NSString+UnicharUtilities.m"; sourceTree = "<group>"; };
+		D18C399B27A5C5DA004CE678 /* DiffMatchPatchCFUtilities.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; name = DiffMatchPatchCFUtilities.c; path = objc/DiffMatchPatchCFUtilities.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +81,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D16F684025012F16008D85D1 /* libQtCore.4.dylib in Frameworks */,
 				D130064F12F02D9700702C0E /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,13 +91,17 @@
 		089C166AFE841209C02AAC07 /* Diff Match Patch */ = {
 			isa = PBXGroup;
 			children = (
+				D18C399B27A5C5DA004CE678 /* DiffMatchPatchCFUtilities.c */,
+				D18C399127A5C42D004CE678 /* DiffMatchPatch.m */,
+				D18C399227A5C42D004CE678 /* NSMutableDictionary+DMPExtensions.m */,
+				D18C399327A5C42D004CE678 /* NSString+JavaSubstring.m */,
+				D18C399527A5C42D004CE678 /* NSString+UnicharUtilities.m */,
+				D18C399427A5C42D004CE678 /* NSString+UriCompatibility.m */,
 				D16F684425012FDE008D85D1 /* C_LONGINT.cpp */,
 				D16F684525012FDE008D85D1 /* C_LONGINT.h */,
 				D16F684125012FDE008D85D1 /* C_TEXT.cpp */,
 				D16F684325012FDE008D85D1 /* C_TEXT.h */,
 				D16F684225012FDE008D85D1 /* C_TYPES.h */,
-				D16F683C25012E73008D85D1 /* diff_match_patch.cpp */,
-				D16F683B25012E73008D85D1 /* diff_match_patch.h */,
 				D16F684B25013068008D85D1 /* 4DPlugin-JSON.cpp */,
 				D16F684C25013068008D85D1 /* 4DPlugin-JSON.h */,
 				D108BD7A1A03D1E6001F1B90 /* Manifest */,
@@ -165,7 +174,6 @@
 		D16FBB3C22A4C07E008F0416 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D16F683F25012F16008D85D1 /* libQtCore.4.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -185,7 +193,6 @@
 				18B684FA06944F2000CC6A1E /* PrivateTypes.h in Headers */,
 				18B684FB06944F2000CC6A1E /* PublicTypes.h in Headers */,
 				D16F684825012FDE008D85D1 /* C_TEXT.h in Headers */,
-				D16F683D25012E73008D85D1 /* diff_match_patch.h in Headers */,
 				D16F684725012FDE008D85D1 /* C_TYPES.h in Headers */,
 				D120937F13534DCC00A72CAA /* 4DPlugin-Diff-Match-Patch.h in Headers */,
 			);
@@ -292,10 +299,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18C399C27A5C5DA004CE678 /* DiffMatchPatchCFUtilities.c in Sources */,
+				D18C399627A5C42D004CE678 /* DiffMatchPatch.m in Sources */,
+				D18C399727A5C42D004CE678 /* NSMutableDictionary+DMPExtensions.m in Sources */,
+				D18C399827A5C42D004CE678 /* NSString+JavaSubstring.m in Sources */,
+				D18C399927A5C42D004CE678 /* NSString+UriCompatibility.m in Sources */,
+				D18C399A27A5C42D004CE678 /* NSString+UnicharUtilities.m in Sources */,
 				18B684FF06944F8800CC6A1E /* 4DPlugin-Diff-Match-Patch.cpp in Sources */,
 				D13116A91A03ACB700DE1322 /* 4DPluginAPI.c in Sources */,
 				D16F684625012FDE008D85D1 /* C_TEXT.cpp in Sources */,
-				D16F683E25012E73008D85D1 /* diff_match_patch.cpp in Sources */,
 				D16F684D25013068008D85D1 /* 4DPlugin-JSON.cpp in Sources */,
 				D16F684925012FDE008D85D1 /* C_LONGINT.cpp in Sources */,
 			);
@@ -320,7 +332,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
@@ -342,16 +354,15 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = "include/**";
+				HEADER_SEARCH_PATHS = (
+					"include/**",
+					"objc/**",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/lib",
-					"\"/Users/miyako/Documents/miyako@github.com/4d-plugin-diff-match-patch/Diff Match Patch/test/Plugins/Diff Match Patch.bundle/Contents/MacOS\"",
-					"$(PROJECT_DIR)/a",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = Bundle;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 3.0.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -375,7 +386,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
@@ -394,16 +405,15 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = "include/**";
+				HEADER_SEARCH_PATHS = (
+					"include/**",
+					"objc/**",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/lib",
-					"\"/Users/miyako/Documents/miyako@github.com/4d-plugin-diff-match-patch/Diff Match Patch/test/Plugins/Diff Match Patch.bundle/Contents/MacOS\"",
-					"$(PROJECT_DIR)/a",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = Bundle;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 3.0.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -427,7 +437,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_LINK_OBJC_RUNTIME = NO;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Manual;
@@ -444,16 +454,15 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = "include/**";
+				HEADER_SEARCH_PATHS = (
+					"include/**",
+					"objc/**",
+				);
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Library/Bundles";
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/lib",
-					"\"/Users/miyako/Documents/miyako@github.com/4d-plugin-diff-match-patch/Diff Match Patch/test/Plugins/Diff Match Patch.bundle/Contents/MacOS\"",
-					"$(PROJECT_DIR)/a",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				LIBRARY_STYLE = Bundle;
-				MARKETING_VERSION = 2.0.1;
+				MARKETING_VERSION = 3.0.0;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -476,7 +485,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -509,12 +518,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/lib",
-					"\"/Users/miyako/Documents/miyako@github.com/4d-plugin-diff-match-patch/Diff Match Patch/test/Plugins/Diff Match Patch.bundle/Contents/MacOS\"",
-					"$(PROJECT_DIR)/a",
+				HEADER_SEARCH_PATHS = (
+					"include/**",
+					"objc/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OBJROOT = "$(SRCROOT)/build";
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
@@ -526,7 +535,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -559,12 +568,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/lib",
-					"\"/Users/miyako/Documents/miyako@github.com/4d-plugin-diff-match-patch/Diff Match Patch/test/Plugins/Diff Match Patch.bundle/Contents/MacOS\"",
-					"$(PROJECT_DIR)/a",
+				HEADER_SEARCH_PATHS = (
+					"include/**",
+					"objc/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				OBJROOT = "$(SRCROOT)/build";
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
@@ -576,7 +585,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
@@ -609,12 +618,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(PROJECT_DIR)/lib",
-					"\"/Users/miyako/Documents/miyako@github.com/4d-plugin-diff-match-patch/Diff Match Patch/test/Plugins/Diff Match Patch.bundle/Contents/MacOS\"",
-					"$(PROJECT_DIR)/a",
+				HEADER_SEARCH_PATHS = (
+					"include/**",
+					"objc/**",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				SDKROOT = macosx;
 				SYMROOT = "$(SRCROOT)/test/Plugins";
 			};

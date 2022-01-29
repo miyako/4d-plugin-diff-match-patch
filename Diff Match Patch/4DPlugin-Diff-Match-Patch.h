@@ -12,8 +12,14 @@
 #define PLUGIN_DIFF_MATCH_PATCH_H
 
 #include "4DPluginAPI.h"
+#if VERSIONWIN
 #include <QtCore>
 #include "diff_match_patch.h"
+#else
+#include "DiffMatchPatch.h"
+
+#endif
+
 #include "C_LONGINT.h"
 #include "C_TEXT.h"
 #include "4DPlugin-JSON.h"
