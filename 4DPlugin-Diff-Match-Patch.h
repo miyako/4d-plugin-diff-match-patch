@@ -26,6 +26,8 @@
 
 #pragma mark -
 
-void diff_match_patch(PA_PluginParameters params);
+void diff(PA_PluginParameters params);
+void match(PA_PluginParameters params);
+void patch(PA_PluginParameters params);
 
 #endif /* PLUGIN_DIFF_MATCH_PATCH_H */

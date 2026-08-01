@@ -4,8 +4,18 @@
 	"commands": [
 		{
 			"theme": "Diff Match Patch",
-			"syntax": "diff_match_patch(&T;&T;&J):T",
+			"syntax": "diff(&T;&T;&J):T",
 			"threadSafe": true
-		}
+		},
+		{
+			"theme": "Diff Match Patch",
+			"syntax": "match(&T;&T;&J):T",
+			"threadSafe": true
+		},
+		{
+			"theme": "Diff Match Patch",
+			"syntax": "patch(&T;&T;&J):T",
+			"threadSafe": true
+		}		
 	]
 }

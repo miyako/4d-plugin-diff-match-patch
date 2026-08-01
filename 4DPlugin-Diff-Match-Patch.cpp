@@ -21,7 +21,25 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params) {
 			// --- Diff Match Patch
             
 			case 1 :
-				diff_match_patch(params);
+				diff(params);
+				break;
+            case 2 :
+                match(params);
+                break;
+            case 3 :
+                patch(params);
+                break;
+
+			default :
+				/* Unknown selector: still must set a return value, or 4D will
+				   hang waiting for one that never arrives. This is a latent
+				   freeze risk the moment a new command is added to the
+				   manifest without a matching case here. */
+				{
+					sLONG_PTR *pResult = (sLONG_PTR *)params->fResult;
+					C_TEXT emptyReturn;
+					emptyReturn.setReturn(pResult);
+				}
 				break;
 
         }
@@ -35,7 +53,7 @@ void PluginMain(PA_long32 selector, PA_PluginParameters params) {
 
 #pragma mark -
 
-void diff_match_patch(PA_PluginParameters params) {
+void diff(PA_PluginParameters params) {
 
     sLONG_PTR *pResult = (sLONG_PTR *)params->fResult;
     PackagePtr pParams = (PackagePtr)params->fParameters;
@@ -61,7 +79,16 @@ void diff_match_patch(PA_PluginParameters params) {
         /* diff options */
         
         if(ob_is_defined(option, L"diffTimeout")) {
-            dmp.Diff_Timeout = (float)ob_get_n(option, L"diffTimeout");
+            float diffTimeout = (float)ob_get_n(option, L"diffTimeout");
+            /* The library treats <= 0 as "no timeout" (see DiffMatchPatch.m:
+               Diff_Timeout <= 0 -> deadline = NSDate distantFuture), which
+               would let a caller opt into unbounded computation time against
+               two fully caller-controlled text blobs. Ignore non-positive
+               values and keep the library's built-in default (1.0s) instead
+               of allowing it to be disabled. */
+            if(diffTimeout > 0) {
+                dmp.Diff_Timeout = diffTimeout;
+            }
         }
         
         if(ob_is_defined(option, L"diffEditCost")) {
@@ -124,4 +151,12 @@ void diff_match_patch(PA_PluginParameters params) {
 #endif
 
     returnValue.setReturn(pResult);
+}
+
+void match(PA_PluginParameters params) {
+
+}
+
+void patch(PA_PluginParameters params) {
+
 }
