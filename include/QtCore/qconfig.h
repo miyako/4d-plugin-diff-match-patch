@@ -45,15 +45,25 @@
 #endif
 #endif
 /* Machine Architecture */
-#ifndef QT_BOOTSTRAPPED
+/* This qconfig.h was generated from a macOS build and unconditionally
+   defined QT_ARCH_MACOSX regardless of platform. That cascades into
+   qatomic_arch.h always selecting qatomic_macosx.h, which (since MSVC
+   defines neither __x86_64__ nor __i386__, both GCC-only) falls through
+   to qatomic_powerpc.h -- PowerPC inline assembly cl.exe cannot parse.
+   Gate the mac define on an actual Apple compiler macro, and select
+   QT_ARCH_WINDOWS under MSVC instead, which routes to the real native
+   _Interlocked* intrinsics path in qatomic_windows.h. */
+#if defined(__APPLE__)
 # define QT_ARCH_MACOSX
+#elif defined(_MSC_VER)
+# define QT_ARCH_WINDOWS
 #else
 # define QT_ARCH_MACOSX
 #endif
 /* Compile time features */
 #define QT_LARGEFILE_SUPPORT 64
 #define QT_MAC_USE_COCOA 1
-#if defined(__LP64__)
+#if defined(__LP64__) || defined(_WIN64)
 # define QT_POINTER_SIZE 8
 #else
 # define QT_POINTER_SIZE 4
