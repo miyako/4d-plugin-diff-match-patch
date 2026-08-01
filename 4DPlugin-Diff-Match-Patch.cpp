@@ -155,8 +155,176 @@ void diff(PA_PluginParameters params) {
 
 void match(PA_PluginParameters params) {
 
+    sLONG_PTR *pResult = (sLONG_PTR *)params->fResult;
+    PackagePtr pParams = (PackagePtr)params->fParameters;
+
+    C_TEXT Param1_text_1;      /* text to search within */
+    C_TEXT Param2_text_2;      /* pattern to search for */
+    C_TEXT returnValue;
+
+    Param1_text_1.fromParamAtIndex(pParams, 1);
+    Param2_text_2.fromParamAtIndex(pParams, 2);
+
+#if VERSIONWIN
+    class diff_match_patch dmp;
+#else
+    DiffMatchPatch *dmp = [[DiffMatchPatch alloc]init];
+#endif
+
+    PA_ObjectRef option = PA_GetObjectParameter(params, 3);
+
+    /* The manifest gives match() only two text params + options, but the
+       library's match_main also needs a search-start location ("near").
+       There's no dedicated 4D parameter for it, so it's read from options
+       under "near" and defaults to the start of the text if absent. This
+       is an assumption on my part, not something specified anywhere --
+       flag/change if a different contract is wanted. */
+    sLONG matchNear = 0;
+
+    if(option) {
+
+        if(ob_is_defined(option, L"matchThreshold")) {
+            dmp.Match_Threshold = (float)ob_get_n(option, L"matchThreshold");
+        }
+
+        if(ob_is_defined(option, L"matchDistance")) {
+            dmp.Match_Distance = (int)ob_get_n(option, L"matchDistance");
+        }
+
+        if(ob_is_defined(option, L"matchMaxBits")) {
+#if VERSIONWIN
+            /* Defensive clamp: Match_MaxBits sizes a bitmask inside the
+               Bitap algorithm. An unvalidated caller-supplied value here
+               was flagged earlier as a potential shift-overflow/UB risk;
+               1-64 is a machine-word-safe range for 32- or 64-bit builds.
+               NOT verified against the Windows/Qt library's own header
+               (not available to me) -- confirm before relying on this. */
+            int maxBits = (int)ob_get_n(option, L"matchMaxBits");
+            if(maxBits < 1) maxBits = 1;
+            if(maxBits > 64) maxBits = 64;
+            dmp.Match_MaxBits = (short)maxBits;
+#else
+            /* No public setter exists on this port (Match_MaxBits is a
+               plain ivar in DiffMatchPatch.h, not a @property) -- fixed at
+               its compiled-in default of 32. See the "protected on mac"
+               comment already in diff()'s option handling above. */
+#endif
+        }
+
+        if(ob_is_defined(option, L"near")) {
+            matchNear = (sLONG)ob_get_n(option, L"near");
+            if(matchNear < 0) matchNear = 0;
+        }
+
+    }
+
+#if VERSIONWIN
+    QString t1((const QChar *)Param1_text_1.getUTF16StringPtr(), Param1_text_1.getUTF16Length());
+    QString pattern((const QChar *)Param2_text_2.getUTF16StringPtr(), Param2_text_2.getUTF16Length());
+
+    /* Guard the library's own precondition (pattern length <= Match_MaxBits)
+       rather than letting an out-of-range pattern fail inside match_main.
+       Traced on the Mac port (DiffMatchPatch.m match_bitapOfText: asserts
+       exactly this); assumed to hold for the Windows/Qt port too since it's
+       the same reference algorithm, but not verified against that header. */
+    int loc = -1;
+    if(dmp.Match_MaxBits == 0 || pattern.length() <= (int)dmp.Match_MaxBits) {
+        loc = dmp.match_main(t1, pattern, matchNear);
+    }
+    QString result = QString::number(loc);
+    returnValue.setUTF16String((const PA_Unichar *)result.data(), result.length());
+#else
+    NSString *t1 = Param1_text_1.copyUTF16String();
+    NSString *pattern = Param2_text_2.copyUTF16String();
+
+    /* No accessor exists for Match_MaxBits on Mac (see above), so the live
+       value can't be read back here -- guard against its known compiled-in
+       default of 32 (DiffMatchPatch.m init) instead. */
+    const NSUInteger kMatchMaxBitsMac = 32;
+    NSInteger loc = -1;
+    if(pattern.length <= kMatchMaxBitsMac) {
+        NSUInteger rawLoc = [dmp match_mainForText:t1 pattern:pattern near:(NSUInteger)matchNear];
+        loc = (rawLoc == NSNotFound) ? -1 : (NSInteger)rawLoc;
+    }
+    NSString *result = [NSString stringWithFormat:@"%ld", (long)loc];
+    returnValue.setUTF16String(result);
+    [pattern release];
+    [t1 release];
+    [dmp release];
+#endif
+
+    returnValue.setReturn(pResult);
 }
 
 void patch(PA_PluginParameters params) {
 
+    sLONG_PTR *pResult = (sLONG_PTR *)params->fResult;
+    PackagePtr pParams = (PackagePtr)params->fParameters;
+
+    C_TEXT Param1_text_1;
+    C_TEXT Param2_text_2;
+    C_TEXT returnValue;
+
+    Param1_text_1.fromParamAtIndex(pParams, 1);
+    Param2_text_2.fromParamAtIndex(pParams, 2);
+
+#if VERSIONWIN
+    class diff_match_patch dmp;
+#else
+    DiffMatchPatch *dmp = [[DiffMatchPatch alloc]init];
+#endif
+
+    PA_ObjectRef option = PA_GetObjectParameter(params, 3);
+
+    /* Traced (DiffMatchPatch.m ~1939-2080): patch_makeFromOldString:andNewString:
+       internally calls diff_main (so Diff_Timeout applies), then, when there
+       are more than 2 diffs, diff_cleanupSemantic + diff_cleanupEfficiency
+       (so Diff_EditCost applies), then patch_makeFromOldString:andDiffs:
+       (so Patch_Margin applies -- it controls how diffs are chunked into
+       patches and how much surrounding context each patch keeps). */
+
+    if(option) {
+
+        if(ob_is_defined(option, L"diffTimeout")) {
+            float diffTimeout = (float)ob_get_n(option, L"diffTimeout");
+            /* Same non-positive-value guard as diff() -- see there for why. */
+            if(diffTimeout > 0) {
+                dmp.Diff_Timeout = diffTimeout;
+            }
+        }
+
+        if(ob_is_defined(option, L"diffEditCost")) {
+            dmp.Diff_EditCost = (short)ob_get_n(option, L"diffEditCost");
+        }
+
+        if(ob_is_defined(option, L"patchMargin")) {
+            dmp.Patch_Margin = (short)ob_get_n(option, L"patchMargin");
+        }
+
+        /* patchDeleteThreshold, matchThreshold, matchDistance, and
+           matchMaxBits are only consumed by patch_apply:/match_main (see
+           DiffMatchPatch.m) -- this command only creates and serializes
+           patches (there's no "apply a patch to a base text" command in
+           the manifest), so those options would be silent no-ops here too.
+           Deliberately not read. */
+    }
+
+#if VERSIONWIN
+    QString t1((const QChar *)Param1_text_1.getUTF16StringPtr(), Param1_text_1.getUTF16Length());
+    QString t2((const QChar *)Param2_text_2.getUTF16StringPtr(), Param2_text_2.getUTF16Length());
+    QList<Patch> patches = dmp.patch_make(t1, t2);
+    QString patchText = dmp.patch_toText(patches);
+    returnValue.setUTF16String((const PA_Unichar *)patchText.data(), patchText.length());
+#else
+    NSString *t1 = Param1_text_1.copyUTF16String();
+    NSString *t2 = Param2_text_2.copyUTF16String();
+    NSMutableArray *patches = [dmp patch_makeFromOldString:t1 andNewString:t2];
+    NSString *patchText = [dmp patch_toText:patches];
+    returnValue.setUTF16String(patchText);
+    [t2 release];
+    [t1 release];
+    [dmp release];
+#endif
+
+    returnValue.setReturn(pResult);
 }
