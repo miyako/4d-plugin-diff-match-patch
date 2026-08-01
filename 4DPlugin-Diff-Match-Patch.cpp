@@ -179,7 +179,7 @@ void match(PA_PluginParameters params) {
        under "near" and defaults to the start of the text if absent. This
        is an assumption on my part, not something specified anywhere --
        flag/change if a different contract is wanted. */
-    sLONG matchNear = 0;
+    PA_long32 matchNear = 0;
 
     if(option) {
 
@@ -212,7 +212,7 @@ void match(PA_PluginParameters params) {
         }
 
         if(ob_is_defined(option, L"near")) {
-            matchNear = (sLONG)ob_get_n(option, L"near");
+            matchNear = (PA_long32)ob_get_n(option, L"near");
             if(matchNear < 0) matchNear = 0;
         }
 

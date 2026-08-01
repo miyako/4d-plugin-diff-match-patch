@@ -19,6 +19,15 @@
 #ifndef DIFF_MATCH_PATCH_H
 #define DIFF_MATCH_PATCH_H
 
+/* clock_t is used throughout this header (deadline parameters on diff_main,
+   diff_compute, diff_lineMode, diff_bisect, diff_bisectSplit, etc.) but was
+   never actually declared here -- there is no real #include anywhere in
+   this file (the ones near the top are inside a doc comment, illustrative
+   only). This presumably compiled before via some transitive include from
+   a full Qt SDK's own headers pulling in <ctime> indirectly; the vendored,
+   headers-only Qt copy this project actually uses doesn't do that. */
+#include <ctime>
+
 /*
  * Functions for diff, match and patch.
  * Computes the difference between two texts to create a patch.
