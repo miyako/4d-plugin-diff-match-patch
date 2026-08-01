@@ -72,20 +72,29 @@ jobs:
       # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
-      # DIAGNOSTIC, temporary: every static check (downloaded source, checkout
-      # log, .gitattributes/.gitignore, LFS status) says include/QtCore/QtCore
-      # should be found via the existing plain "include" path below, and it
-      # demonstrably was found in an earlier run (got past this exact point
-      # into qconfig.h) -- but the build is back to "Cannot open include
-      # file: 'QtCore'" now with nothing else obviously different. Rather
-      # than guess further, this lists what's actually on the runner's disk
-      # at build time so the next log shows real ground truth instead of an
-      # inference from a side-channel source download. Remove once resolved.
-      - name: diagnose include/QtCore
+      # DIAGNOSTIC, temporary: the previous diagnostic confirmed
+      # include\QtCore\QtCore genuinely exists on disk at build time (3,784
+      # bytes, correct name), yet cl.exe still reports it missing. Every
+      # static explanation (checkout correctness, gitignore/LFS, path length,
+      # file existence) is now ruled out. This isolates cl.exe from MSBuild
+      # entirely: locates the same compiler via vswhere + vcvarsall, then
+      # tries the exact same #include <QtCore> resolution standalone, to
+      # tell us whether this is an MSBuild-specific behavior or something
+      # about cl.exe/the filesystem itself. Remove once resolved.
+      - name: diagnose cl.exe include resolution directly
         shell: cmd
         run: |
-          dir "include\QtCore" | findstr /I "QtCore"
-          if exist "include\QtCore\QtCore" (echo FOUND: include\QtCore\QtCore exists) else (echo MISSING: include\QtCore\QtCore not found)
+          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do set VSPATH=%%i
+          call "%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
+          echo #include ^<QtCore^> > _diag.cpp
+          echo int main(){return 0;} >> _diag.cpp
+          echo --- attempting standalone compile with the same relative include path ---
+          cl /c /Iinclude /TP _diag.cpp
+          echo --- exit code: %errorlevel% ---
+          echo --- icacls on the actual file ---
+          icacls "include\QtCore\QtCore"
+          echo --- first line of the file, to confirm it is genuinely readable ---
+          more +0 "include\QtCore\QtCore" | findstr /n "^" | findstr "^1:"
 
       - name: build x64
         shell: cmd
