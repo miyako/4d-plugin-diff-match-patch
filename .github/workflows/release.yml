@@ -59,11 +59,39 @@ jobs:
       - name: setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      # The header (4DPlugin-Diff-Match-Patch.h) does `#include <QtCore>`
+      # under #if VERSIONWIN, but nothing in this job previously installed
+      # Qt -- the build failed with "Cannot open include file: 'QtCore'"
+      # because the compiler's include search path never contained a Qt
+      # install at all. This step provisions one.
+      #
+      # ASSUMPTION, not verified: Qt version pinned to 5.15.2 (the last
+      # Qt5 LTS), matching the project's era (it's pinned to the legacy
+      # v140 toolset per the comment below). Confirm this matches whatever
+      # Qt version the project was actually developed against -- if it's
+      # Qt6, arch/version below need to change accordingly.
+      - name: install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+
       # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
       - name: build x64
         shell: cmd
+        env:
+          # jurplel/install-qt-action sets QT_ROOT_DIR to the installed Qt's
+          # root (e.g. C:\Qt\5.15.2\msvc2019_64) -- documented behavior of
+          # that action, not independently verified in this environment.
+          # Prepending here reaches <QtCore> regardless of what the
+          # .vcxproj's own AdditionalIncludeDirectories/LibraryDirectories
+          # contain, since I don't have that file to check/edit directly.
+          INCLUDE: ${{ env.QT_ROOT_DIR }}\include;${{ env.INCLUDE }}
+          LIB: ${{ env.QT_ROOT_DIR }}\lib;${{ env.LIB }}
         run: msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
 
       - name: upload windows binaries
