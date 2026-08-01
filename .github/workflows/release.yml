@@ -86,24 +86,27 @@ jobs:
       # under `include` -- #include <QtCore> needs a file literally named
       # `QtCore` at <QT_ROOT_DIR>\include\QtCore\QtCore, so the search path
       # must include that subdirectory specifically, not just the parent
-      # `include` folder (confirmed: a previous attempt at this fix set
-      # INCLUDE to just `...\include` and still failed with the identical
-      # "Cannot open include file: 'QtCore'" error).
+      # `include` folder.
       #
-      # Also switched from setting INCLUDE/LIB as shell environment
-      # variables (unclear whether MSBuild's C++ toolchain reliably honors
-      # those, and unverified here either way) to passing IncludePath /
-      # LibraryPath as MSBuild properties on the command line -- these are
-      # the same properties Visual Studio's own "VC++ Directories" project
-      # page writes to, and are Microsoft's documented mechanism for
-      # exactly this (injecting extra search paths without editing the
-      # .vcxproj itself).
+      # IncludePath/LibraryPath are passed as MSBuild properties on the
+      # command line (the same properties Visual Studio's "VC++ Directories"
+      # project page writes to) rather than as shell env vars, since it's
+      # unclear whether MSBuild's C++ toolchain reliably honors the latter.
+      #
+      # The semicolons inside each property's value are percent-encoded as
+      # %3B. MSBuild's command-line parser treats an unescaped `;` inside a
+      # /p: argument as the separator between *separate* name=value
+      # properties in the same switch -- not as a literal character within
+      # one property's value -- so a literal `;` here caused
+      # "error MSB1006: Property is not valid" (it split the value at the
+      # first `;` and choked on the remaining bare path with no `=`).
+      # %3B is decoded back to a literal `;` once MSBuild has the value.
       - name: build x64
         shell: cmd
         run: >
           msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
-          "/p:IncludePath=$(IncludePath);${{ env.QT_ROOT_DIR }}\include;${{ env.QT_ROOT_DIR }}\include\QtCore"
-          "/p:LibraryPath=$(LibraryPath);${{ env.QT_ROOT_DIR }}\lib"
+          "/p:IncludePath=$(IncludePath)%3B${{ env.QT_ROOT_DIR }}\include%3B${{ env.QT_ROOT_DIR }}\include\QtCore"
+          "/p:LibraryPath=$(LibraryPath)%3B${{ env.QT_ROOT_DIR }}\lib"
 
       - name: upload windows binaries
         uses: actions/upload-artifact@v4
