@@ -82,31 +82,18 @@ jobs:
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
       #
-      # Qt's own headers live inside a per-module subdirectory, not directly
-      # under `include` -- #include <QtCore> needs a file literally named
-      # `QtCore` at <QT_ROOT_DIR>\include\QtCore\QtCore, so the search path
-      # must include that subdirectory specifically, not just the parent
-      # `include` folder.
-      #
-      # IncludePath/LibraryPath are passed as MSBuild properties on the
-      # command line (the same properties Visual Studio's "VC++ Directories"
-      # project page writes to) rather than as shell env vars, since it's
-      # unclear whether MSBuild's C++ toolchain reliably honors the latter.
-      #
-      # The semicolons inside each property's value are percent-encoded as
-      # %3B. MSBuild's command-line parser treats an unescaped `;` inside a
-      # /p: argument as the separator between *separate* name=value
-      # properties in the same switch -- not as a literal character within
-      # one property's value -- so a literal `;` here caused
-      # "error MSB1006: Property is not valid" (it split the value at the
-      # first `;` and choked on the remaining bare path with no `=`).
-      # %3B is decoded back to a literal `;` once MSBuild has the value.
+      # Qt paths are passed via QtDir, a property added directly to
+      # Diff_Match_Patch.vcxproj (see its AdditionalIncludeDirectories /
+      # AdditionalLibraryDirectories for the Release|x64 config). Two earlier
+      # attempts at this (setting INCLUDE/LIB shell env vars, then passing
+      # IncludePath/LibraryPath as MSBuild properties) both had zero effect,
+      # traced to the actual .vcxproj: AdditionalIncludeDirectories there is
+      # a hardcoded literal list that never references $(IncludePath) at
+      # all, so no override of that property could ever have reached it --
+      # confirmed by reading the real file, not inferred from the log.
       - name: build x64
         shell: cmd
-        run: >
-          msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
-          "/p:IncludePath=$(IncludePath)%3B${{ env.QT_ROOT_DIR }}\include%3B${{ env.QT_ROOT_DIR }}\include\QtCore"
-          "/p:LibraryPath=$(LibraryPath)%3B${{ env.QT_ROOT_DIR }}\lib"
+        run: msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:QtDir="${{ env.QT_ROOT_DIR }}" /m
 
       - name: upload windows binaries
         uses: actions/upload-artifact@v4
