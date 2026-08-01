@@ -72,38 +72,9 @@ jobs:
       # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
-      # DIAGNOSTIC, temporary: all three path forms (relative, absolute,
-      # .\-prefixed) failed identically -- path resolution is ruled out.
-      # The one remaining untested variable is the file's own name: it has
-      # no extension. Testing two things: (a) does a QUOTED include of the
-      # same bare name behave differently from angle-bracket, since they
-      # use different resolution algorithms; (b) can this compiler find
-      # ANY extensionless file via angle-bracket include, using a fresh
-      # file unrelated to Qt, isolating "extensionless files in general"
-      # from "something specific to QtCore".
-      - name: diagnose cl.exe include resolution directly
-        shell: cmd
-        run: |
-          for /f "usebackq tokens=*" %%i in (`"C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) do set VSPATH=%%i
-          call "%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
-          echo --- attempt 4: quoted include of the same bare name ---
-          echo #include "QtCore" > _diag_quoted.cpp
-          echo int main(){return 0;} >> _diag_quoted.cpp
-          cl /c /Iinclude /TP _diag_quoted.cpp
-          echo --- exit code: %errorlevel% ---
-          echo --- attempt 5: a fresh, unrelated extensionless file, angle-bracket ---
-          echo // just a test header > myheader
-          echo #include ^<myheader^> > _diag_freshext.cpp
-          echo int main(){return 0;} >> _diag_freshext.cpp
-          cl /c /I. /TP _diag_freshext.cpp
-          echo --- exit code: %errorlevel% ---
-          echo --- attempt 6: same fresh file, but WITH a .h extension ---
-          echo // just a test header > myheader.h
-          echo #include ^<myheader.h^> > _diag_withext.cpp
-          echo int main(){return 0;} >> _diag_withext.cpp
-          cl /c /I. /TP _diag_withext.cpp
-          echo --- exit code: %errorlevel% ---
-
+      # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
+      # legacy v140 toolset the project is pinned to, so we override it on
+      # the command line rather than requiring an extra VS component install.
       - name: build x64
         shell: cmd
         run: msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
