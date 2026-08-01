@@ -2,4 +2,4 @@
 $old:="ああああ"
 $new:="あいいあ"
 
-$diff:=diff_match_patch($old; $new)
+$diff:=diff($old; $new)
