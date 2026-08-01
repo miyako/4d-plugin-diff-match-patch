@@ -72,15 +72,14 @@ jobs:
       # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
-      # DIAGNOSTIC, temporary: the previous diagnostic confirmed
-      # include\QtCore\QtCore genuinely exists on disk at build time (3,784
-      # bytes, correct name), yet cl.exe still reports it missing. Every
-      # static explanation (checkout correctness, gitignore/LFS, path length,
-      # file existence) is now ruled out. This isolates cl.exe from MSBuild
-      # entirely: locates the same compiler via vswhere + vcvarsall, then
-      # tries the exact same #include <QtCore> resolution standalone, to
-      # tell us whether this is an MSBuild-specific behavior or something
-      # about cl.exe/the filesystem itself. Remove once resolved.
+      # DIAGNOSTIC, temporary: standalone cl.exe reproduces the failure with
+      # /Iinclude (relative), even though the identical relative path string
+      # was just used successfully by icacls and more/findstr in the same
+      # shell session, same working directory, moments earlier. Permissions
+      # are fine, content is fine. The one variable not yet isolated: does
+      # an ABSOLUTE include path succeed where the relative one fails? This
+      # compiler (MSVC 19.51.36248 / VS2026) is newer than anything in my
+      # training data, so I'm testing rather than asserting a mechanism.
       - name: diagnose cl.exe include resolution directly
         shell: cmd
         run: |
@@ -88,13 +87,17 @@ jobs:
           call "%VSPATH%\VC\Auxiliary\Build\vcvarsall.bat" x64
           echo #include ^<QtCore^> > _diag.cpp
           echo int main(){return 0;} >> _diag.cpp
-          echo --- attempting standalone compile with the same relative include path ---
+          echo --- CWD ---
+          cd
+          echo --- attempt 1: relative /Iinclude (known to fail) ---
           cl /c /Iinclude /TP _diag.cpp
           echo --- exit code: %errorlevel% ---
-          echo --- icacls on the actual file ---
-          icacls "include\QtCore\QtCore"
-          echo --- first line of the file, to confirm it is genuinely readable ---
-          more +0 "include\QtCore\QtCore" | findstr /n "^" | findstr "^1:"
+          echo --- attempt 2: absolute /I%CD%\include ---
+          cl /c /I"%CD%\include" /TP _diag.cpp
+          echo --- exit code: %errorlevel% ---
+          echo --- attempt 3: relative /I with explicit .\ prefix ---
+          cl /c /I".\include" /TP _diag.cpp
+          echo --- exit code: %errorlevel% ---
 
       - name: build x64
         shell: cmd
