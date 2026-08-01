@@ -16,6 +16,14 @@
 # define Q_BYTE_ORDER Q_BIG_ENDIAN
 #elif defined(__LITTLE_ENDIAN__)
 # define Q_BYTE_ORDER Q_LITTLE_ENDIAN
+#elif defined(_MSC_VER) && (defined(_M_X64) || defined(_M_IX86) || defined(_M_ARM64))
+/* This qconfig.h was generated from a macOS/g++ Qt4 build (see QT_BUILD_KEY
+   above) and only recognized GCC/Clang's __BIG_ENDIAN__/__LITTLE_ENDIAN__
+   predefined macros, which MSVC never defines -- causing a hard #error on
+   every MSVC/Windows compile. All of MSVC's targets (x86, x64, ARM64) are
+   little-endian, so this is a safe, stable fact to assert directly rather
+   than trying to detect it. */
+# define Q_BYTE_ORDER Q_LITTLE_ENDIAN
 #else
 # error "Unable to determine byte order!"
 #endif
@@ -23,6 +31,14 @@
 #if defined(__BIG_ENDIAN__)
 # define Q_BYTE_ORDER Q_BIG_ENDIAN
 #elif defined(__LITTLE_ENDIAN__)
+# define Q_BYTE_ORDER Q_LITTLE_ENDIAN
+#elif defined(_MSC_VER) && (defined(_M_X64) || defined(_M_IX86) || defined(_M_ARM64))
+/* This qconfig.h was generated from a macOS/g++ Qt4 build (see QT_BUILD_KEY
+   above) and only recognized GCC/Clang's __BIG_ENDIAN__/__LITTLE_ENDIAN__
+   predefined macros, which MSVC never defines -- causing a hard #error on
+   every MSVC/Windows compile. All of MSVC's targets (x86, x64, ARM64) are
+   little-endian, so this is a safe, stable fact to assert directly rather
+   than trying to detect it. */
 # define Q_BYTE_ORDER Q_LITTLE_ENDIAN
 #else
 # error "Unable to determine byte order!"

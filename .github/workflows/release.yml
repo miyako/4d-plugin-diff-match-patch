@@ -59,41 +59,22 @@ jobs:
       - name: setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      # The header (4DPlugin-Diff-Match-Patch.h) does `#include <QtCore>`
-      # under #if VERSIONWIN, but nothing in this job previously installed
-      # Qt -- the build failed with "Cannot open include file: 'QtCore'"
-      # because the compiler's include search path never contained a Qt
-      # install at all. This step provisions one.
+      # This project vendors its own headers-only Qt 4.8.6 copy under
+      # include/QtCore (confirmed long-standing, not something to replace
+      # with an installed SDK) -- earlier attempts in this history installed
+      # a real Qt 5.15.2 SDK via CI, which turned out to be solving a
+      # problem that didn't exist and was actively shadowed by/conflicting
+      # with the vendored copy. That step, and the QtDir property it fed
+      # into the .vcxproj, have been removed. The vendored qconfig.h's
+      # byte-order check has been fixed separately (it only recognized
+      # GCC/Clang's predefined macros, never MSVC's) -- see that file.
       #
-      # ASSUMPTION, not verified: Qt version pinned to 5.15.2 (the last
-      # Qt5 LTS), matching the project's era (it's pinned to the legacy
-      # v140 toolset per the comment below). Confirm this matches whatever
-      # Qt version the project was actually developed against -- if it's
-      # Qt6, arch/version below need to change accordingly.
-      - name: install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: '5.15.2'
-          host: 'windows'
-          target: 'desktop'
-          arch: 'win64_msvc2019_64'
-
       # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
-      #
-      # Qt paths are passed via QtDir, a property added directly to
-      # Diff_Match_Patch.vcxproj (see its AdditionalIncludeDirectories /
-      # AdditionalLibraryDirectories for the Release|x64 config). Two earlier
-      # attempts at this (setting INCLUDE/LIB shell env vars, then passing
-      # IncludePath/LibraryPath as MSBuild properties) both had zero effect,
-      # traced to the actual .vcxproj: AdditionalIncludeDirectories there is
-      # a hardcoded literal list that never references $(IncludePath) at
-      # all, so no override of that property could ever have reached it --
-      # confirmed by reading the real file, not inferred from the log.
       - name: build x64
         shell: cmd
-        run: msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /p:QtDir="${{ env.QT_ROOT_DIR }}" /m
+        run: msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
 
       - name: upload windows binaries
         uses: actions/upload-artifact@v4
