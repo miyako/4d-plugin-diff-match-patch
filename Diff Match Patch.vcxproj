@@ -87,7 +87,7 @@
     <!-- Only applies if not already set, so /p:QtDir=... from the command
          line (e.g. CI, pointed at wherever that job installed Qt) overrides
          this cleanly. The default below is a guess at a typical local Qt
-         installer path -- not verified against any actual dev machine --
+         installer path, not verified against any actual dev machine;
          change it if this project is normally developed against a
          different location. -->
     <QtDir Condition="'$(QtDir)'==''">C:\Qt\5.15.2\msvc2019_64</QtDir>
