@@ -81,18 +81,29 @@ jobs:
       # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
+      #
+      # Qt's own headers live inside a per-module subdirectory, not directly
+      # under `include` -- #include <QtCore> needs a file literally named
+      # `QtCore` at <QT_ROOT_DIR>\include\QtCore\QtCore, so the search path
+      # must include that subdirectory specifically, not just the parent
+      # `include` folder (confirmed: a previous attempt at this fix set
+      # INCLUDE to just `...\include` and still failed with the identical
+      # "Cannot open include file: 'QtCore'" error).
+      #
+      # Also switched from setting INCLUDE/LIB as shell environment
+      # variables (unclear whether MSBuild's C++ toolchain reliably honors
+      # those, and unverified here either way) to passing IncludePath /
+      # LibraryPath as MSBuild properties on the command line -- these are
+      # the same properties Visual Studio's own "VC++ Directories" project
+      # page writes to, and are Microsoft's documented mechanism for
+      # exactly this (injecting extra search paths without editing the
+      # .vcxproj itself).
       - name: build x64
         shell: cmd
-        env:
-          # jurplel/install-qt-action sets QT_ROOT_DIR to the installed Qt's
-          # root (e.g. C:\Qt\5.15.2\msvc2019_64) -- documented behavior of
-          # that action, not independently verified in this environment.
-          # Prepending here reaches <QtCore> regardless of what the
-          # .vcxproj's own AdditionalIncludeDirectories/LibraryDirectories
-          # contain, since I don't have that file to check/edit directly.
-          INCLUDE: ${{ env.QT_ROOT_DIR }}\include;${{ env.INCLUDE }}
-          LIB: ${{ env.QT_ROOT_DIR }}\lib;${{ env.LIB }}
-        run: msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
+        run: >
+          msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
+          "/p:IncludePath=$(IncludePath);${{ env.QT_ROOT_DIR }}\include;${{ env.QT_ROOT_DIR }}\include\QtCore"
+          "/p:LibraryPath=$(LibraryPath);${{ env.QT_ROOT_DIR }}\lib"
 
       - name: upload windows binaries
         uses: actions/upload-artifact@v4
