@@ -4,13 +4,8 @@
 ![downloads](https://img.shields.io/github/downloads/miyako/4d-plugin-diff-match-patch/total)
 
 # 4d-plugin-diff-match-patch
+
 Basic implementation of [google-diff-match-patch](https://github.com/google/diff-match-patch)
-
-### Screenshot
-
-<img width="421" alt="2018-02-14 15 49 21" src="https://user-images.githubusercontent.com/1725068/36197663-bed69022-11b7-11e8-8425-3dc7ae9fb62d.png">
-
-instead of standard ``<ins>`` and ``<del>`` tags with ``background`` style, the library is modified to return ``<span>`` with ``background-color`` style, for better compatibility with 4D multi style text.
 
 The Diff Match Patch plugin exposes Google's diff-match-patch algorithm to 4D as three commands: [`diff`](#diff), [`match`](#match), and [`patch`](#patch). Under the hood it drives a native, per-platform port of the same reference algorithm — a Qt/C++ port on Windows, an Objective-C port (`DiffMatchPatch.m`) on macOS — and every command returns a plain 4D `Text` value: an HTML-highlighted diff, a match index, or a serialized patch document, respectively.
 
@@ -231,3 +226,9 @@ $loc:=match($text; $pattern; New object("near"; 10; "matchThreshold"; 0.6))
 $patchText:=patch($old; $new)
 $patchText:=patch($old; $new; New object("patchMargin"; 8))
 ```
+
+### Screenshot
+
+<img width="421" alt="2018-02-14 15 49 21" src="https://user-images.githubusercontent.com/1725068/36197663-bed69022-11b7-11e8-8425-3dc7ae9fb62d.png">
+
+instead of standard ``<ins>`` and ``<del>`` tags with ``background`` style, the library is modified to return ``<span>`` with ``background-color`` style, for better compatibility with 4D multi style text.
