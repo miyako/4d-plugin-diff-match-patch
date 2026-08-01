@@ -72,6 +72,21 @@ jobs:
       # GitHub-hosted windows-latest ships VS2022 (v143 toolset) but not the
       # legacy v140 toolset the project is pinned to, so we override it on
       # the command line rather than requiring an extra VS component install.
+      # DIAGNOSTIC, temporary: every static check (downloaded source, checkout
+      # log, .gitattributes/.gitignore, LFS status) says include/QtCore/QtCore
+      # should be found via the existing plain "include" path below, and it
+      # demonstrably was found in an earlier run (got past this exact point
+      # into qconfig.h) -- but the build is back to "Cannot open include
+      # file: 'QtCore'" now with nothing else obviously different. Rather
+      # than guess further, this lists what's actually on the runner's disk
+      # at build time so the next log shows real ground truth instead of an
+      # inference from a side-channel source download. Remove once resolved.
+      - name: diagnose include/QtCore
+        shell: cmd
+        run: |
+          dir "include\QtCore" | findstr /I "QtCore"
+          if exist "include\QtCore\QtCore" (echo FOUND: include\QtCore\QtCore exists) else (echo MISSING: include\QtCore\QtCore not found)
+
       - name: build x64
         shell: cmd
         run: msbuild "${{ env.VCX_SOLUTION }}" /p:Configuration=Release /p:Platform=x64 /p:PlatformToolset=v143 /m
