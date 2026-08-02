@@ -67,7 +67,7 @@ void diff(PA_PluginParameters params) {
 
 #if VERSIONWIN
     /* because we used the same name for function */
-    class diff_match_patch dmp;
+    Win_DiffMatchPatch dmp;
 #else
     DiffMatchPatch *dmp = [[DiffMatchPatch alloc]init];
 #endif
@@ -134,11 +134,11 @@ void diff(PA_PluginParameters params) {
      */
     
 #if VERSIONWIN
-    QString t1((const QChar *)Param1_text_1.getUTF16StringPtr(), Param1_text_1.getUTF16Length());
-    QString t2((const QChar *)Param2_text_2.getUTF16StringPtr(), Param2_text_2.getUTF16Length());
-    QList<Diff>diffs = dmp.diff_main(t1, t2);
-    QString html = dmp.diff_prettyHtml(diffs);
-    returnValue.setUTF16String((const PA_Unichar *)html.data(), html.length());
+    std::wstring t1(reinterpret_cast<const wchar_t *>(Param1_text_1.getUTF16StringPtr()), Param1_text_1.getUTF16Length());
+    std::wstring t2(reinterpret_cast<const wchar_t *>(Param2_text_2.getUTF16StringPtr()), Param2_text_2.getUTF16Length());
+    Win_DiffMatchPatch::Diffs diffs = dmp.diff_main(t1, t2);
+    std::wstring html = dmp.diff_prettyHtml(diffs);
+    returnValue.setUTF16String(reinterpret_cast<const PA_Unichar *>(html.data()), (uint32_t)html.length());
 #else
     NSString *t1 = Param1_text_1.copyUTF16String();
     NSString *t2 = Param2_text_2.copyUTF16String();
@@ -166,7 +166,7 @@ void match(PA_PluginParameters params) {
     Param2_text_2.fromParamAtIndex(pParams, 2);
 
 #if VERSIONWIN
-    class diff_match_patch dmp;
+    Win_DiffMatchPatch dmp;
 #else
     DiffMatchPatch *dmp = [[DiffMatchPatch alloc]init];
 #endif
@@ -219,20 +219,20 @@ void match(PA_PluginParameters params) {
     }
 
 #if VERSIONWIN
-    QString t1((const QChar *)Param1_text_1.getUTF16StringPtr(), Param1_text_1.getUTF16Length());
-    QString pattern((const QChar *)Param2_text_2.getUTF16StringPtr(), Param2_text_2.getUTF16Length());
+    std::wstring t1(reinterpret_cast<const wchar_t *>(Param1_text_1.getUTF16StringPtr()), Param1_text_1.getUTF16Length());
+    std::wstring pattern(reinterpret_cast<const wchar_t *>(Param2_text_2.getUTF16StringPtr()), Param2_text_2.getUTF16Length());
 
     /* Guard the library's own precondition (pattern length <= Match_MaxBits)
        rather than letting an out-of-range pattern fail inside match_main.
        Traced on the Mac port (DiffMatchPatch.m match_bitapOfText: asserts
-       exactly this); assumed to hold for the Windows/Qt port too since it's
-       the same reference algorithm, but not verified against that header. */
+       exactly this); confirmed the STL port enforces the same precondition
+       internally (see its match_main), so this mirrors its own guard. */
     int loc = -1;
-    if(dmp.Match_MaxBits == 0 || pattern.length() <= (int)dmp.Match_MaxBits) {
+    if(dmp.Match_MaxBits == 0 || (int)pattern.length() <= (int)dmp.Match_MaxBits) {
         loc = dmp.match_main(t1, pattern, matchNear);
     }
-    QString result = QString::number(loc);
-    returnValue.setUTF16String((const PA_Unichar *)result.data(), result.length());
+    std::wstring result = std::to_wstring(loc);
+    returnValue.setUTF16String(reinterpret_cast<const PA_Unichar *>(result.data()), (uint32_t)result.length());
 #else
     NSString *t1 = Param1_text_1.copyUTF16String();
     NSString *pattern = Param2_text_2.copyUTF16String();
@@ -269,7 +269,7 @@ void patch(PA_PluginParameters params) {
     Param2_text_2.fromParamAtIndex(pParams, 2);
 
 #if VERSIONWIN
-    class diff_match_patch dmp;
+    Win_DiffMatchPatch dmp;
 #else
     DiffMatchPatch *dmp = [[DiffMatchPatch alloc]init];
 #endif
@@ -310,11 +310,11 @@ void patch(PA_PluginParameters params) {
     }
 
 #if VERSIONWIN
-    QString t1((const QChar *)Param1_text_1.getUTF16StringPtr(), Param1_text_1.getUTF16Length());
-    QString t2((const QChar *)Param2_text_2.getUTF16StringPtr(), Param2_text_2.getUTF16Length());
-    QList<Patch> patches = dmp.patch_make(t1, t2);
-    QString patchText = dmp.patch_toText(patches);
-    returnValue.setUTF16String((const PA_Unichar *)patchText.data(), patchText.length());
+    std::wstring t1(reinterpret_cast<const wchar_t *>(Param1_text_1.getUTF16StringPtr()), Param1_text_1.getUTF16Length());
+    std::wstring t2(reinterpret_cast<const wchar_t *>(Param2_text_2.getUTF16StringPtr()), Param2_text_2.getUTF16Length());
+    Win_DiffMatchPatch::Patches patches = dmp.patch_make(t1, t2);
+    std::wstring patchText = dmp.patch_toText(patches);
+    returnValue.setUTF16String(reinterpret_cast<const PA_Unichar *>(patchText.data()), (uint32_t)patchText.length());
 #else
     NSString *t1 = Param1_text_1.copyUTF16String();
     NSString *t2 = Param2_text_2.copyUTF16String();

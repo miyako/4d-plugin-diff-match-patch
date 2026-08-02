@@ -13,8 +13,17 @@
 
 #include "4DPluginAPI.h"
 #if VERSIONWIN
-#include <QtCore>
+/* Was Qt-based (QString/QChar/QList/QMap/QVariant); the vendored copy under
+   include/QtCore is headers-only (no compiled Qt lib ships in this repo, and
+   none is built by CI), so linking always failed with unresolved externals
+   for every Qt symbol diff_match_patch.cpp touched. Swapped in the upstream
+   STL/std::wstring port of the same class (same method names/semantics,
+   confirmed against the tunable fields and diff_main/match_main/patch_make/
+   patch_toText/diff_prettyHtml signatures actually used below) so the
+   Windows build no longer needs Qt at all.
+   https://github.com/leutloff/diff-match-patch-cpp-stl */
 #include "diff_match_patch.h"
+typedef diff_match_patch<std::wstring> Win_DiffMatchPatch;
 #else
 #include "DiffMatchPatch.h"
 
