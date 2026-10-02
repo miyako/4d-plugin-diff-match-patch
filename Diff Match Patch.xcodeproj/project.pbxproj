@@ -31,6 +31,7 @@
 		D18C399927A5C42D004CE678 /* NSString+UriCompatibility.m in Sources */ = {isa = PBXBuildFile; fileRef = D18C399427A5C42D004CE678 /* NSString+UriCompatibility.m */; };
 		D18C399A27A5C42D004CE678 /* NSString+UnicharUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = D18C399527A5C42D004CE678 /* NSString+UnicharUtilities.m */; };
 		D18C399C27A5C5DA004CE678 /* DiffMatchPatchCFUtilities.c in Sources */ = {isa = PBXBuildFile; fileRef = D18C399B27A5C5DA004CE678 /* DiffMatchPatchCFUtilities.c */; };
+		15AE9378AFABC9DB4E7CC183 /* constants.xlf in CopyFiles */ = {isa = PBXBuildFile; fileRef = D14D10DD1A03A8A5008B3411 /* constants.xlf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,6 +42,7 @@
 			dstSubfolderSpec = 7;
 			files = (
 				D134D4AC1A030BA0008D14EF /* manifest.json in CopyFiles */,
+				15AE9378AFABC9DB4E7CC183 /* constants.xlf in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
